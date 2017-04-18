@@ -1,0 +1,7 @@
+/packages
+bin/
+obj/
+*.suo
+/Seeker.Client.NLog/*.user
+/*/config
+/.vs
