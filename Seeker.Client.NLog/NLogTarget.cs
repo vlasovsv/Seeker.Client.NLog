@@ -86,7 +86,8 @@ namespace Seeker.Client.NLog
                         {
                             new JsonAttribute("type", "${exception:format=Type}"),
                             new JsonAttribute("message", "${exception:format=Message,Method,StackTrace}"),
-                        }
+                        },
+                        RenderEmptyObject = false
                     },
                     false)
                 }
@@ -95,7 +96,6 @@ namespace Seeker.Client.NLog
             if (Properties.Any())
             {
                 var propertyLayout = new JsonLayout();
-                propertyLayout.RenderEmptyObject = false;
                 foreach (var prop in Properties)
                 {
                     propertyLayout.Attributes.Add(new JsonAttribute(prop.Name, prop.Value));
@@ -222,7 +222,7 @@ namespace Seeker.Client.NLog
                     var responseStream = response.GetResponseStream();
                 }
             }
-            catch
+            catch(Exception e)
             {
                 return;
             }
