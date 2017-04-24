@@ -18,12 +18,23 @@ namespace Seeker.Client.NLog
     [Target("Seeker")]
     public sealed class NLogTarget : Target
     {
+        #region Private fields
+
         private readonly string _apiBatchResource = "api/v1/logs";
 
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Creates an Nlog target to a Seeker server.
+        /// </summary>
         public NLogTarget()
         {
             Properties = new List<SeekerPropertyItem>();
-        }
+        } 
+
+        #endregion
 
         #region Properties
 
