@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Seeker.Client.NLog</id>
+    <version>$version$</version>
+    <title>NLog target to a Seeker server</title>
+    <authors>Sergey Vlasov</authors>
+    <owners>vlasovsv</owners>
+    <licenseUrl>https://github.com/vlasovsv/Seeker.Client.NLog/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/vlasovsv/Seeker.Client.NLog</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This is a Nlog target to a Seeker server https://github.com/vlasovsv/Seeker.</description>
+    <releaseNotes>$releaseNotes$</releaseNotes>
+    <language>en-US</language>
+    <tags>log Nlog target Seeker</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="NLog" version="[4.4.0,)" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Seeker.Client.NLog\bin\Release\Seeker.Client.NLog.*" target="lib\net45\" exclude="**\*.pdb" />
+  </files>
+</package>

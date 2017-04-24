@@ -233,7 +233,7 @@ namespace Seeker.Client.NLog
                     var responseStream = response.GetResponseStream();
                 }
             }
-            catch(Exception e)
+            catch
             {
                 return;
             }

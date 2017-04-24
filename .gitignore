@@ -5,3 +5,4 @@ obj/
 /Seeker.Client.NLog/*.user
 /*/config
 /.vs
+/nuspecs/Packages
