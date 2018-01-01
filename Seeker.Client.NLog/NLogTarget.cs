@@ -32,6 +32,7 @@ namespace Seeker.Client.NLog
         public NLogTarget()
         {
             Properties = new List<SeekerPropertyItem>();
+            ExceptionLayout = "${exception:format=ToString}";
         } 
 
         #endregion
@@ -52,6 +53,15 @@ namespace Seeker.Client.NLog
         {
             get;
             private set;
+        }
+
+        /// <summary>
+        /// Gets or sets an exception layout.
+        /// </summary>
+        public Layout ExceptionLayout
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -96,7 +106,7 @@ namespace Seeker.Client.NLog
                         Attributes =
                         {
                             new JsonAttribute("type", "${exception:format=Type}"),
-                            new JsonAttribute("message", "${exception:format=Message,Method,StackTrace}"),
+                            new JsonAttribute("message", ExceptionLayout),
                         },
                         RenderEmptyObject = false
                     },
@@ -166,7 +176,7 @@ namespace Seeker.Client.NLog
         /// Sends a collection of logs to Seeker.
         /// </summary>
         /// <param name="logEvents">Logging events to be written.</param>
-        void SendLogs(IEnumerable<LogEventInfo> logEvents)
+        private async void SendLogs(IEnumerable<LogEventInfo> logEvents)
         {
             if (ServerUrl == null)
             {
@@ -177,11 +187,11 @@ namespace Seeker.Client.NLog
             {
                 var request = CreateRequest();
 
-                using (var requestStream = request.GetRequestStream())
+                using (var requestStream = await request.GetRequestStreamAsync())
                 {
                     using (var payload = new StreamWriter(requestStream))
                     {
-                        payload.Write("[");
+                        await payload.WriteAsync("[");
                         var firstLog = logEvents.FirstOrDefault();
                         foreach (var logEvent in logEvents)
                         {
@@ -189,20 +199,20 @@ namespace Seeker.Client.NLog
                             {
                                 payload.Write(",");
                             }
-                            payload.Write(Layout.Render(logEvent));
+                            await payload.WriteAsync(Layout.Render(logEvent));
                         }
-                        payload.Write("]");
+                        await payload.WriteAsync("]");
                     }
                 }
 
-                using (var response = (HttpWebResponse)request.GetResponse())
+                using (var response = (HttpWebResponse)await request.GetResponseAsync())
                 {
                     var responseStream = response.GetResponseStream();
                 }
             }
-            catch
+            catch(Exception e)
             {
-                return;
+                InternalLogger.Error(e, "Error when sending logs to Seeker: {0}.", ServerUrl);
             }
         }
 
@@ -233,9 +243,9 @@ namespace Seeker.Client.NLog
                     var responseStream = response.GetResponseStream();
                 }
             }
-            catch
+            catch(Exception e)
             {
-                return;
+                InternalLogger.Error(e, "Error when sending logs to Seeker: {0}.", ServerUrl);
             }
         }
     }
